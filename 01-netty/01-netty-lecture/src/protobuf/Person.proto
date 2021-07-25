@@ -1,0 +1,76 @@
+syntax = "proto2";
+
+package com.harsh.protobuf;
+
+//包路径，自定义
+
+// 文件选项
+// SPEED加快解析速度，默认就是SPEED
+option optimize_for = SPEED;
+
+//包路径，自定义，比package优先级高
+//如果java_package存在则默认使用java_package的配置，如果使用java_package就必须要指定package
+//以免在生成java以外的语言时，不存在java_package参数，造成命名秘密空间问题
+option java_package = "com.harsh.netty.example_06_protobuf";
+
+//生成的外部类的名称，自定义 如果不定义则默认使用文件名的驼峰命名法转换的名称作为外部类名称
+option java_outer_classname = "MyDataInfo";
+
+/*
+    message 表示消息，如同Java的类
+
+    格式：
+       修饰符 数据类型 属性名 = 唯一标记数;
+    修饰符：
+       required 必须的，必须存在，必须赋值
+       optional 可选的，可以不使用
+       repeated 重复的，标识一个list/链表
+    数据类型：
+       包括 bool，int32，float，double，和string
+    唯一标记数：
+       标签编号1-15与较高的编号相比，编码所需的字节减少了一个字节，因此，
+          为了进行优化，您可以决定将这些标签用于常用或重复的元素
+*/
+//包含了所有可能出现的消息类型，最外层的消息类型
+message Message {
+    enum DataType {
+        PersonType = 1;
+        DogType = 2;
+        CatType = 3;
+    }
+
+    // 用于表示当前传递的类型
+    required DataType data_type = 1;
+
+    /*
+        如果消息中包含许多可选字段，并且最多同时设置一个字段，
+        则可以使用oneof功能强制执行此行为并节省内存。
+
+        oneof中的所有字段会共享内存，oneof字段类似于可选字段，
+        并且最多可以同时设置一个字段。设置oneof中的任何成员会自动清除所有其他成员。
+        您可以根据所选择的语言，使用特殊case()或WhichOneof()方法来检查其中一个设置的值（如果有）。
+    */
+    //oneof 里面的值最多出现一个，确定一个后其他的都会被删除掉，不会浪费资源
+    oneof dataBoy {
+        Person person = 2;
+        Dog dog = 3;
+        Cat cat = 4;
+    }
+}
+
+//-------------具体消息-------------
+message Person {
+    required string name = 1;
+    optional int32 age = 2;
+    optional string address = 3;
+}
+
+message Dog {
+    required string name = 1;
+    optional int32 age = 2;
+}
+
+message Cat {
+    required string name = 1;
+    optional string city = 3;
+}
