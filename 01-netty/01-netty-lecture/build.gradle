@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+}
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+group 'com.harsh'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile(
+            "io.netty:netty-all:4.1.66.Final",
+            "com.google.protobuf:protobuf-java:4.0.0-rc-2",
+            "com.google.protobuf:protobuf-java-util:4.0.0-rc-2"
+
+    )
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
